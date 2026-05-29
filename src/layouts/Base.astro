@@ -1,0 +1,387 @@
+---
+const {
+  title,
+  description,
+  image = '/assets/apps/vaktio-plus/panel.png',
+  locale = 'tr',
+  translations = null,
+  titleKey = null,
+  descriptionKey = null,
+} = Astro.props;
+
+const ogLocale = locale === 'en' ? 'en_US' : 'tr_TR';
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#011f42" />
+    <meta name="description" content={description} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content={title} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/apps/vaktio-plus/icon.png" />
+    <link rel="apple-touch-icon" href="/assets/apps/vaktio-plus/icon.png" />
+    <title>{title}</title>
+  </head>
+  <body data-default-locale={locale} data-title-key={titleKey ?? ''} data-description-key={descriptionKey ?? ''}>
+    <div class="backdrop"></div>
+    <div class="shell">
+      {translations && (
+        <div class="shell-tools">
+          <div class="locale-toggle" role="group" aria-label="Language" data-locale-toggle data-i18n-attrs={JSON.stringify({ 'aria-label': 'common.language' })}>
+            <button class="locale-option" type="button" data-locale-option="tr" aria-pressed="false">TR</button>
+            <button class="locale-option" type="button" data-locale-option="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
+      )}
+      <slot />
+    </div>
+    {translations && <script type="application/json" id="i18n-data" set:html={JSON.stringify(translations)}></script>}
+    {translations && (
+      <script is:inline>
+        const storageKey = 'hhstudio.locale';
+        const dataEl = document.getElementById('i18n-data');
+        const toggle = document.querySelector('[data-locale-toggle]');
+        const buttons = toggle ? Array.from(toggle.querySelectorAll('[data-locale-option]')) : [];
+        const body = document.body;
+
+        const resolve = (source, path) => {
+          if (!source || !path) return '';
+          return path.split('.').reduce((value, key) => {
+            if (value == null) return undefined;
+            return value[key];
+          }, source);
+        };
+
+        const getTranslations = () => {
+          try {
+            return dataEl ? JSON.parse(dataEl.textContent || '{}') : {};
+          } catch {
+            return {};
+          }
+        };
+
+        const updateMeta = (selector, attr, value) => {
+          const el = document.querySelector(selector);
+          if (el) el.setAttribute(attr, value);
+        };
+
+        const applyLocale = (nextLocale) => {
+          const translations = getTranslations();
+          const localeData = translations[nextLocale] || translations[body.dataset.defaultLocale] || translations.tr || {};
+          const titleKey = body.dataset.titleKey;
+          const descriptionKey = body.dataset.descriptionKey;
+
+          document.documentElement.lang = nextLocale;
+          body.dataset.locale = nextLocale;
+
+          document.querySelectorAll('[data-i18n]').forEach((element) => {
+            const key = element.getAttribute('data-i18n');
+            const value = resolve(localeData, key);
+            if (typeof value === 'string') {
+              element.textContent = value;
+            }
+          });
+
+          document.querySelectorAll('[data-i18n-attrs]').forEach((element) => {
+            const raw = element.getAttribute('data-i18n-attrs');
+            if (!raw) return;
+
+            let mapping = null;
+            try {
+              mapping = JSON.parse(raw);
+            } catch {
+              return;
+            }
+
+            Object.entries(mapping).forEach(([attr, key]) => {
+              const value = resolve(localeData, key);
+              if (typeof value === 'string') {
+                element.setAttribute(attr, value);
+              }
+            });
+          });
+
+          if (titleKey) {
+            const pageTitle = resolve(localeData, titleKey);
+            if (typeof pageTitle === 'string') {
+              document.title = pageTitle;
+              updateMeta('meta[name="description"]', 'content', resolve(localeData, descriptionKey) || '');
+              updateMeta('meta[property="og:title"]', 'content', pageTitle);
+              updateMeta('meta[property="og:description"]', 'content', resolve(localeData, descriptionKey) || '');
+              updateMeta('meta[property="og:locale"]', 'content', nextLocale === 'en' ? 'en_US' : 'tr_TR');
+              updateMeta('meta[name="twitter:title"]', 'content', pageTitle);
+              updateMeta('meta[name="twitter:description"]', 'content', resolve(localeData, descriptionKey) || '');
+              updateMeta('meta[name="apple-mobile-web-app-title"]', 'content', pageTitle);
+            }
+          }
+
+          buttons.forEach((button) => {
+            const isActive = button.getAttribute('data-locale-option') === nextLocale;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+          });
+
+          try {
+            localStorage.setItem(storageKey, nextLocale);
+          } catch {
+            // Ignore storage failures.
+          }
+        };
+
+        const initialLocale = (() => {
+          try {
+            const saved = localStorage.getItem(storageKey);
+            if (saved === 'en' || saved === 'tr') return saved;
+          } catch {
+            // Ignore storage failures.
+          }
+
+          return body.dataset.defaultLocale || 'tr';
+        })();
+
+        toggle?.addEventListener('click', (event) => {
+          const target = event.target instanceof Element ? event.target.closest('[data-locale-option]') : null;
+          if (!target) return;
+          const locale = target.getAttribute('data-locale-option');
+          if (locale === 'tr' || locale === 'en') {
+            applyLocale(locale);
+          }
+        });
+
+        applyLocale(initialLocale);
+      </script>
+    )}
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    --bg: #000605;
+    --panel: #071112;
+    --panel-2: #0a1718;
+    --text: #f4f1ea;
+    --muted: #a7a9ad;
+    --faint: #7e8288;
+    --accent: #18d5e1;
+    --accent-2: #2fa7ff;
+    --stroke: rgba(24, 213, 225, 0.18);
+    --stroke-strong: rgba(24, 213, 225, 0.28);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    --radius-xl: 30px;
+    --radius-lg: 24px;
+    --radius-md: 18px;
+    --radius-sm: 14px;
+  }
+
+  html {
+    background: var(--bg);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(24, 213, 225, 0.12), transparent 28%),
+      radial-gradient(circle at 82% 18%, rgba(47, 167, 255, 0.12), transparent 24%),
+      radial-gradient(circle at 50% 102%, rgba(24, 213, 225, 0.08), transparent 26%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'SF Pro Text', 'SF Pro Display', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'ss01' 1, 'ss02' 1;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 20%),
+      radial-gradient(circle at 50% 0, rgba(47, 167, 255, 0.11), transparent 22%);
+    opacity: 0.9;
+  }
+
+  .shell {
+    position: relative;
+    width: min(1180px, calc(100vw - 32px));
+    margin: 0 auto;
+    padding: 20px 0 48px;
+  }
+
+  .shell-tools {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 14px;
+  }
+
+  .locale-toggle {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(16px);
+  }
+
+  .locale-option {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    min-width: 42px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition:
+      color 120ms ease,
+      background-color 120ms ease,
+      transform 120ms ease;
+  }
+
+  .locale-option:hover {
+    transform: translateY(-1px);
+  }
+
+  .locale-option.is-active {
+    color: #001115;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+
+  .locale-option:focus-visible {
+    outline: 2px solid rgba(47, 167, 255, 0.9);
+    outline-offset: 2px;
+  }
+
+  .section {
+    margin-top: 28px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--stroke);
+    border-radius: 999px;
+    color: var(--accent);
+    background: rgba(24, 213, 225, 0.06);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .panel {
+    background: linear-gradient(180deg, rgba(10, 17, 18, 0.94), rgba(7, 17, 18, 0.88));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow);
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition:
+      transform 120ms ease,
+      border-color 120ms ease,
+      background-color 120ms ease;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
+  .button-primary {
+    color: #001115;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-color: transparent;
+  }
+
+  .button-secondary {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .button-placeholder {
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.08);
+    cursor: default;
+    opacity: 0.66;
+  }
+
+  .grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .tiny {
+    color: var(--faint);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 720px) {
+    .shell {
+      padding-top: 28px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .shell-tools {
+      margin-bottom: 12px;
+    }
+  }
+</style>
