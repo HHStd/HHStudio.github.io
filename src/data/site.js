@@ -1,5 +1,8 @@
 const supportEmail = 'hasan_alay@outlook.com';
 const testflightUrl = 'https://testflight.apple.com/join/gZMW6HEr';
+const basePath = import.meta.env.BASE_URL || '/';
+const normalizedBasePath = basePath.endsWith('/') ? basePath : `${basePath}/`;
+const withBase = (path) => `${normalizedBasePath}${path.replace(/^\/+/, '')}`;
 
 const buildMailto = (subject, body) =>
   `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -19,46 +22,47 @@ export const site = {
     tr: buildMailto('Vaktio+ Destek', 'Merhaba,\n\nCihaz modeli:\nİşletim sistemi:\nUygulama sürümü: 1.0.0\nSorun / öneri:\n'),
     en: buildMailto('Vaktio+ Support', 'Hello,\n\nDevice model:\nOperating system:\nApp version: 1.0.0\nIssue / suggestion:\n'),
   },
-  homePath: '/vaktio/',
-  privacyPath: '/vaktio/privacy/',
-  supportPath: '/vaktio/support/',
-  faviconPath: '/assets/apps/vaktio-plus/favicon.png',
-  touchIconPath: '/assets/apps/vaktio-plus/icon.png',
-  ogImage: '/assets/apps/vaktio-plus/panel.png',
+  homePath: normalizedBasePath,
+  vaktioPath: withBase('vaktio/'),
+  privacyPath: withBase('vaktio/privacy/'),
+  supportPath: withBase('vaktio/support/'),
+  faviconPath: withBase('assets/apps/vaktio-plus/favicon.png'),
+  touchIconPath: withBase('assets/apps/vaktio-plus/icon.png'),
+  ogImage: withBase('assets/apps/vaktio-plus/panel.png'),
 };
 
 export const app = {
   id: 'vaktio-plus',
   name: 'Vaktio+',
-  icon: '/assets/apps/vaktio-plus/icon.png',
+  icon: withBase('assets/apps/vaktio-plus/icon.png'),
   screenshots: [
     {
-      src: '/assets/apps/vaktio-plus/1.png',
+      src: withBase('assets/apps/vaktio-plus/1.png'),
       width: 415,
       height: 900,
     },
     {
-      src: '/assets/apps/vaktio-plus/2.png',
+      src: withBase('assets/apps/vaktio-plus/2.png'),
       width: 415,
       height: 900,
     },
     {
-      src: '/assets/apps/vaktio-plus/3.png',
+      src: withBase('assets/apps/vaktio-plus/3.png'),
       width: 415,
       height: 900,
     },
     {
-      src: '/assets/apps/vaktio-plus/4.png',
+      src: withBase('assets/apps/vaktio-plus/4.png'),
       width: 415,
       height: 900,
     },
     {
-      src: '/assets/apps/vaktio-plus/5.png',
+      src: withBase('assets/apps/vaktio-plus/5.png'),
       width: 415,
       height: 900,
     },
     {
-      src: '/assets/apps/vaktio-plus/6.png',
+      src: withBase('assets/apps/vaktio-plus/6.png'),
       width: 415,
       height: 900,
     },
