@@ -19,8 +19,12 @@ export const site = {
     tr: buildMailto('Vaktio+ Destek', 'Merhaba,\n\nCihaz modeli:\nİşletim sistemi:\nUygulama sürümü: 1.0.0\nSorun / öneri:\n'),
     en: buildMailto('Vaktio+ Support', 'Hello,\n\nDevice model:\nOperating system:\nApp version: 1.0.0\nIssue / suggestion:\n'),
   },
-  privacyPath: '/privacy/',
-  supportPath: '/support/',
+  homePath: '/vaktio/',
+  privacyPath: '/vaktio/privacy/',
+  supportPath: '/vaktio/support/',
+  faviconPath: '/assets/apps/vaktio-plus/favicon.png',
+  touchIconPath: '/assets/apps/vaktio-plus/icon.png',
+  ogImage: '/assets/apps/vaktio-plus/panel.png',
 };
 
 export const app = {

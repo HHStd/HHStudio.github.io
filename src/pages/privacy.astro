@@ -1,121 +1,17 @@
 ---
-import Base from '../layouts/Base.astro';
-import { app, copy, site } from '../data/site.js';
-
-const locale = site.defaultLocale;
-const text = copy[locale].privacy;
+import { site } from '../data/site.js';
 ---
 
-<Base
-  title={text.pageTitle}
-  description={text.pageDescription}
-  image={app.screenshots[0].src}
-  locale={locale}
-  translations={copy}
-  titleKey="privacy.pageTitle"
-  descriptionKey="privacy.pageDescription"
->
-  <header class="page-head">
-    <a class="back" href="/" data-i18n="privacy.back">{text.back}</a>
-    <span class="eyebrow" data-i18n="privacy.eyebrow">{text.eyebrow}</span>
-  </header>
-
-  <main class="legal panel">
-    <h1 data-i18n="privacy.title">{text.title}</h1>
-    <p class="lede" data-i18n="privacy.lede">{text.lede}</p>
-    <p class="tiny update-line" data-i18n="privacy.updated">{text.updated}</p>
-
-    {text.sections.map((section, sectionIndex) => (
-      <section class="copy">
-        <h2 data-i18n={`privacy.sections.${sectionIndex}.title`}>{section.title}</h2>
-        <ul>
-          {section.items.map((item, itemIndex) => (
-            <li data-i18n={`privacy.sections.${sectionIndex}.items.${itemIndex}`}>{item}</li>
-          ))}
-        </ul>
-      </section>
-    ))}
-
-    <section class="copy">
-      <h2 data-i18n="privacy.contactHeading">{text.contactHeading}</h2>
-      <p class="tiny">
-        <span data-i18n="privacy.contactLabel">{text.contactLabel}</span>{' '}
-        <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>
-      </p>
-    </section>
-  </main>
-</Base>
-
-<style>
-  .page-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
-  }
-
-  .back {
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .legal {
-    padding: 22px;
-  }
-
-  .legal h1 {
-    margin: 10px 0 12px;
-    font-size: clamp(2.2rem, 6vw, 3.8rem);
-    line-height: 0.98;
-    letter-spacing: -0.05em;
-  }
-
-  .lede {
-    margin: 0;
-    max-width: 66ch;
-    color: var(--muted);
-    line-height: 1.7;
-    font-size: 17px;
-  }
-
-  .update-line {
-    margin-top: 10px;
-  }
-
-  .copy {
-    margin-top: 26px;
-  }
-
-  .copy h2 {
-    margin: 0 0 10px;
-    font-size: 18px;
-  }
-
-  .copy ul {
-    margin: 0;
-    padding-left: 18px;
-  }
-
-  .copy li {
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .copy li + li {
-    margin-top: 8px;
-  }
-
-  .tiny {
-    margin: 0;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-
-  @media (min-width: 720px) {
-    .legal {
-      padding: 26px;
-    }
-  }
-</style>
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${site.privacyPath}`} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={site.privacyPath} />
+    <title>Gizlilik Politikası · Vaktio+</title>
+  </head>
+  <body>
+    <a href={site.privacyPath}>Gizlilik Politikası</a>
+  </body>
+</html>

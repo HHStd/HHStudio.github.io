@@ -1,0 +1,159 @@
+---
+import Base from '../../layouts/Base.astro';
+import { app, copy, site } from '../../data/site.js';
+
+const locale = site.defaultLocale;
+const text = copy[locale].support;
+---
+
+<Base
+  title={text.pageTitle}
+  description={text.pageDescription}
+  image={app.icon}
+  locale={locale}
+  translations={copy}
+  titleKey="support.pageTitle"
+  descriptionKey="support.pageDescription"
+>
+  <header class="page-head">
+    <a class="back" href={site.homePath} data-i18n="support.back">{text.back}</a>
+    <span class="eyebrow" data-i18n="support.eyebrow">{text.eyebrow}</span>
+  </header>
+
+  <main class="legal panel">
+    <h1 data-i18n="support.title">{text.title}</h1>
+    <p class="lede" data-i18n="support.lede">{text.lede}</p>
+
+    <div class="support-cards">
+      <a
+        class="support-card"
+        href={text.emailCard.href}
+        data-i18n-attrs={JSON.stringify({ href: 'support.emailCard.href' })}
+      >
+        <strong data-i18n="support.emailCard.title">{text.emailCard.title}</strong>
+        <span data-i18n="support.emailCard.subtitle">{text.emailCard.subtitle}</span>
+        <small data-i18n="support.emailCard.description">{text.emailCard.description}</small>
+      </a>
+
+      <a class="support-card" href={site.testflightUrl} rel="noopener noreferrer" target="_blank">
+        <strong data-i18n="support.testflightCard.title">{text.testflightCard.title}</strong>
+        <span data-i18n="support.testflightCard.subtitle">{text.testflightCard.subtitle}</span>
+        <small data-i18n="support.testflightCard.description">{text.testflightCard.description}</small>
+      </a>
+    </div>
+
+    <section class="copy">
+      <h2 data-i18n="support.checklistHeading">{text.checklistHeading}</h2>
+      <ul>
+        {text.checklist.map((item, index) => (
+          <li data-i18n={`support.checklist.${index}`}>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="copy">
+      <h2 data-i18n="support.noteHeading">{text.noteHeading}</h2>
+      <p class="tiny" data-i18n="support.note">{text.note}</p>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .back {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .legal {
+    padding: 22px;
+  }
+
+  .legal h1 {
+    margin: 10px 0 12px;
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 64ch;
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  .support-cards {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .support-card {
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .support-card strong {
+    font-size: 15px;
+  }
+
+  .support-card span {
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 700;
+  }
+
+  .support-card small,
+  .copy li {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .copy {
+    margin-top: 26px;
+  }
+
+  .copy h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+  }
+
+  .copy ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .copy li + li {
+    margin-top: 8px;
+  }
+
+  .tiny {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  @media (min-width: 720px) {
+    .legal {
+      padding: 26px;
+    }
+
+    .support-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
