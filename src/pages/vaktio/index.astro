@@ -325,8 +325,9 @@ const heroShots = app.screenshots.slice(0, 3);
 
   .hero-art {
     position: relative;
-    min-height: 430px;
+    min-height: clamp(540px, 148vw, 760px);
     border-radius: 28px;
+    isolation: isolate;
   }
 
   .art-glow {
@@ -359,6 +360,7 @@ const heroShots = app.screenshots.slice(0, 3);
     padding: 0;
     appearance: none;
     -webkit-appearance: none;
+    aspect-ratio: 415 / 900;
     border-radius: 28px;
     overflow: hidden;
     box-shadow: 0 28px 70px rgba(0, 0, 0, 0.36);
@@ -379,7 +381,7 @@ const heroShots = app.screenshots.slice(0, 3);
   }
 
   .art-card-main {
-    width: min(78%, 320px);
+    width: min(72%, 320px);
     left: 50%;
     bottom: 0;
     transform: translateX(-50%);
@@ -387,18 +389,18 @@ const heroShots = app.screenshots.slice(0, 3);
   }
 
   .art-card-back-left {
-    width: min(42%, 190px);
-    left: 6%;
-    top: 14%;
+    width: min(40%, 168px);
+    left: 2%;
+    top: 12%;
     transform: rotate(-8deg);
     opacity: 0.92;
     z-index: 2;
   }
 
   .art-card-back-right {
-    width: min(42%, 190px);
-    right: 3%;
-    top: 22%;
+    width: min(40%, 168px);
+    right: 0;
+    top: 18%;
     transform: rotate(8deg);
     opacity: 0.92;
     z-index: 2;
@@ -650,6 +652,22 @@ const heroShots = app.screenshots.slice(0, 3);
       min-height: 560px;
     }
 
+    .art-card-main {
+      width: min(78%, 320px);
+    }
+
+    .art-card-back-left {
+      width: min(42%, 190px);
+      left: 6%;
+      top: 14%;
+    }
+
+    .art-card-back-right {
+      width: min(42%, 190px);
+      right: 3%;
+      top: 22%;
+    }
+
     .feature-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -670,6 +688,54 @@ const heroShots = app.screenshots.slice(0, 3);
   }
 
   @media (max-width: 620px) {
+    .hero {
+      gap: 22px;
+      padding: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 15vw, 4.6rem);
+    }
+
+    .hero-text {
+      max-width: none;
+      font-size: 1rem;
+    }
+
+    .hero-actions .button {
+      width: 100%;
+    }
+
+    .hero-art {
+      min-height: clamp(500px, 158vw, 660px);
+    }
+
+    .art-card-main {
+      width: min(70%, 280px);
+    }
+
+    .art-card-back-left {
+      width: min(38%, 146px);
+      left: 0;
+      top: 14%;
+    }
+
+    .art-card-back-right {
+      width: min(38%, 146px);
+      right: -1%;
+      top: 20%;
+    }
+
+    .shot-rail {
+      grid-auto-columns: min(82vw, 320px);
+      gap: 12px;
+    }
+
+    .footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     .lightbox-panel {
       width: min(94vw, 440px);
     }
