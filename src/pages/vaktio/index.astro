@@ -39,7 +39,16 @@ const heroShots = app.screenshots.slice(0, 3);
                 rel="noopener noreferrer"
                 target="_blank"
                 data-i18n={`home.hero.ctas.${index}.label`}
+                data-i18n-attrs={JSON.stringify({ href: `home.hero.ctas.${index}.href` })}
               >
+                {cta.icon === 'app-store' && (
+                  <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path
+                      d="M8.66 5.12a1.25 1.25 0 0 1 1.72.42l8.02 13.6a1.25 1.25 0 0 1-2.15 1.27l-8.02-13.6a1.25 1.25 0 0 1 .43-1.69Zm6.69-.83a1.25 1.25 0 0 1 .43 1.7L7.77 19.58a1.25 1.25 0 1 1-2.15-1.27L13.63 4.7a1.25 1.25 0 0 1 1.72-.41ZM4.5 16.5a1.25 1.25 0 0 1 1.25-1.25h12.5a1.25 1.25 0 1 1 0 2.5H5.75A1.25 1.25 0 0 1 4.5 16.5Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                )}
                 {cta.label}
               </a>
             ) : (
@@ -316,6 +325,13 @@ const heroShots = app.screenshots.slice(0, 3);
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .button-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    margin-right: 8px;
   }
 
   .button-disabled {

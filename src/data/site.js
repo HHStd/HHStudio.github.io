@@ -1,5 +1,9 @@
 const supportEmail = 'hasan_alay@outlook.com';
 const testflightUrl = 'https://testflight.apple.com/join/gZMW6HEr';
+const appStoreUrl = {
+  tr: 'https://apps.apple.com/tr/app/vaktio/id6774295131?l=tr',
+  en: 'https://apps.apple.com/us/app/vaktio/id6774295131',
+};
 const basePath = import.meta.env.BASE_URL || '/';
 const normalizedBasePath = basePath.endsWith('/') ? basePath : `${basePath}/`;
 const withBase = (path) => `${normalizedBasePath}${path.replace(/^\/+/, '')}`;
@@ -89,11 +93,12 @@ export const copy = {
           },
           {
             label: 'App Store',
-            href: null,
-            variant: 'placeholder',
+            href: appStoreUrl.tr,
+            variant: 'secondary',
+            icon: 'app-store',
           },
           {
-            label: 'Google Play',
+            label: 'Google Play · Yakında',
             href: null,
             variant: 'placeholder',
           },
@@ -248,11 +253,12 @@ export const copy = {
           },
           {
             label: 'App Store',
-            href: null,
-            variant: 'placeholder',
+            href: appStoreUrl.en,
+            variant: 'secondary',
+            icon: 'app-store',
           },
           {
-            label: 'Google Play',
+            label: 'Google Play · Soon',
             href: null,
             variant: 'placeholder',
           },
