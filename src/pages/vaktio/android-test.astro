@@ -1,0 +1,221 @@
+---
+import Base from '../../layouts/Base.astro';
+import { copy, site } from '../../data/site.js';
+
+const locale = site.defaultLocale;
+const text = copy[locale].androidTest;
+---
+
+<Base
+  title={text.pageTitle}
+  description={text.pageDescription}
+  image={site.ogImage}
+  locale={locale}
+  translations={copy}
+  titleKey="androidTest.pageTitle"
+  descriptionKey="androidTest.pageDescription"
+>
+  <header class="page-head">
+    <a class="back" href={site.homePath} data-i18n="androidTest.back">{text.back}</a>
+    <span class="eyebrow" data-i18n="androidTest.eyebrow">{text.eyebrow}</span>
+  </header>
+
+  <main class="test panel">
+    <div class="hero">
+      <h1 data-i18n="androidTest.title">{text.title}</h1>
+      <p class="lede" data-i18n="androidTest.lede">{text.lede}</p>
+      <p class="intro" data-i18n="androidTest.intro">{text.intro}</p>
+    </div>
+
+    <section class="group-card">
+      <div>
+        <h2 data-i18n="androidTest.joinHeading">{text.joinHeading}</h2>
+        <p data-i18n="androidTest.joinDescription">{text.joinDescription}</p>
+      </div>
+      <a
+        class="button button-primary"
+        href={text.groupUrl}
+        rel="noopener noreferrer"
+        target="_blank"
+        data-i18n="androidTest.groupCta"
+        data-i18n-attrs={JSON.stringify({ href: 'androidTest.groupUrl' })}
+      >
+        {text.groupCta}
+      </a>
+    </section>
+
+    <section class="copy-grid">
+      <article class="copy-card">
+        <h2 data-i18n="androidTest.stepsHeading">{text.stepsHeading}</h2>
+        <ol>
+          {text.steps.map((item, index) => (
+            <li data-i18n={`androidTest.steps.${index}`}>{item}</li>
+          ))}
+        </ol>
+      </article>
+
+      <article class="copy-card">
+        <h2 data-i18n="androidTest.linksHeading">{text.linksHeading}</h2>
+        <div class="link-list">
+          {text.links.map((link, index) => (
+            <a
+              class="link-row"
+              href={link.href}
+              rel="noopener noreferrer"
+              target="_blank"
+              data-i18n={`androidTest.links.${index}.label`}
+              data-i18n-attrs={JSON.stringify({ href: `androidTest.links.${index}.href` })}
+            >
+              <span>{link.label}</span>
+              <small>{link.href}</small>
+            </a>
+          ))}
+        </div>
+      </article>
+    </section>
+
+    <section class="copy-card wide">
+      <h2 data-i18n="androidTest.focusHeading">{text.focusHeading}</h2>
+      <ul class="focus-list">
+        {text.focus.map((item, index) => (
+          <li data-i18n={`androidTest.focus.${index}`}>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="copy-card note">
+      <h2 data-i18n="androidTest.noteHeading">{text.noteHeading}</h2>
+      <p data-i18n="androidTest.note">{text.note}</p>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .back {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .test {
+    padding: 22px;
+  }
+
+  .hero h1 {
+    margin: 10px 0 12px;
+    font-size: clamp(2.2rem, 6vw, 3.9rem);
+    line-height: 0.96;
+    letter-spacing: -0.06em;
+  }
+
+  .lede,
+  .intro,
+  .group-card p,
+  .copy-card p,
+  .copy-card li,
+  .link-row small {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 66ch;
+    font-size: 17px;
+  }
+
+  .intro {
+    margin: 14px 0 0;
+    max-width: 62ch;
+  }
+
+  .group-card,
+  .copy-card {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .group-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .group-card h2,
+  .copy-card h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .copy-grid {
+    display: grid;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .copy-card ol,
+  .focus-list {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .copy-card li + li,
+  .focus-list li + li {
+    margin-top: 8px;
+  }
+
+  .link-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .link-row {
+    display: grid;
+    gap: 4px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .link-row span {
+    font-weight: 700;
+  }
+
+  .wide {
+    margin-top: 18px;
+  }
+
+  .note {
+    margin-top: 18px;
+  }
+
+  @media (max-width: 720px) {
+    .group-card {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .test {
+      padding: 26px;
+    }
+
+    .copy-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
