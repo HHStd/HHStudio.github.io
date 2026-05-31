@@ -27,51 +27,33 @@ const text = copy[locale].androidTest;
       <p class="intro" data-i18n="androidTest.intro">{text.intro}</p>
     </div>
 
-    <section class="group-card">
-      <div>
-        <h2 data-i18n="androidTest.joinHeading">{text.joinHeading}</h2>
-        <p data-i18n="androidTest.joinDescription">{text.joinDescription}</p>
-      </div>
-      <a
-        class="button button-primary"
-        href={text.groupUrl}
-        rel="noopener noreferrer"
-        target="_blank"
-        data-i18n="androidTest.groupCta"
-        data-i18n-attrs={JSON.stringify({ href: 'androidTest.groupUrl' })}
-      >
-        {text.groupCta}
-      </a>
+    <section class="section-head">
+      <h2 data-i18n="androidTest.flowHeading">{text.flowHeading}</h2>
     </section>
 
-    <section class="copy-grid">
-      <article class="copy-card">
-        <h2 data-i18n="androidTest.stepsHeading">{text.stepsHeading}</h2>
-        <ol>
-          {text.steps.map((item, index) => (
-            <li data-i18n={`androidTest.steps.${index}`}>{item}</li>
-          ))}
-        </ol>
-      </article>
-
-      <article class="copy-card">
-        <h2 data-i18n="androidTest.linksHeading">{text.linksHeading}</h2>
-        <div class="link-list">
-          {text.links.map((link, index) => (
-            <a
-              class="link-row"
-              href={link.href}
-              rel="noopener noreferrer"
-              target="_blank"
-              data-i18n={`androidTest.links.${index}.label`}
-              data-i18n-attrs={JSON.stringify({ href: `androidTest.links.${index}.href` })}
-            >
-              <span>{link.label}</span>
-              <small>{link.href}</small>
-            </a>
-          ))}
-        </div>
-      </article>
+    <section class="flow-list">
+      {text.flow.map((item, index) => (
+        <article class="flow-card">
+          <div class="flow-number" data-i18n={`androidTest.flow.${index}.step`}>
+            {item.step}
+          </div>
+          <div class="flow-content">
+            <h3 data-i18n={`androidTest.flow.${index}.title`}>{item.title}</h3>
+            <p data-i18n={`androidTest.flow.${index}.description`}>{item.description}</p>
+            <span class="flow-note" data-i18n={`androidTest.flow.${index}.note`}>{item.note}</span>
+          </div>
+          <a
+            class="button button-primary"
+            href={item.href}
+            rel="noopener noreferrer"
+            target="_blank"
+            data-i18n={`androidTest.flow.${index}.cta`}
+            data-i18n-attrs={JSON.stringify({ href: `androidTest.flow.${index}.href` })}
+          >
+            {item.cta}
+          </a>
+        </article>
+      ))}
     </section>
 
     <section class="copy-card wide">
@@ -137,32 +119,88 @@ const text = copy[locale].androidTest;
     max-width: 62ch;
   }
 
-  .group-card,
+  .section-head,
   .copy-card {
     margin-top: 18px;
+  }
+
+  .section-head h2,
+  .copy-card h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .flow-list {
+    display: grid;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .flow-card,
+  .copy-card {
     padding: 18px;
     border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .group-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .group-card h2,
-  .copy-card h2 {
-    margin: 0 0 8px;
-    font-size: 18px;
-  }
-
-  .copy-grid {
+  .flow-card {
     display: grid;
-    gap: 18px;
-    margin-top: 18px;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 18px 16px;
+    align-items: start;
+  }
+
+  .flow-number {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    background: rgba(24, 213, 225, 0.08);
+    border: 1px solid rgba(24, 213, 225, 0.18);
+  }
+
+  .flow-content {
+    min-width: 0;
+  }
+
+  .flow-card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  .flow-card p,
+  .flow-note,
+  .copy-card p,
+  .copy-card li {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .flow-card p {
+    margin: 0;
+  }
+
+  .flow-note {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .flow-card .button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .copy-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .copy-card ol,
@@ -177,36 +215,15 @@ const text = copy[locale].androidTest;
   }
 
   .link-list {
-    display: grid;
-    gap: 10px;
-  }
-
-  .link-row {
-    display: grid;
-    gap: 4px;
-    padding: 14px 16px;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .link-row span {
-    font-weight: 700;
-  }
-
-  .wide {
-    margin-top: 18px;
+    display: none;
   }
 
   .note {
     margin-top: 18px;
   }
 
-  @media (max-width: 720px) {
-    .group-card {
-      align-items: flex-start;
-      flex-direction: column;
-    }
+  .wide {
+    margin-top: 18px;
   }
 
   @media (min-width: 720px) {
@@ -214,8 +231,13 @@ const text = copy[locale].androidTest;
       padding: 26px;
     }
 
-    .copy-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .flow-card {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .flow-card .button {
+      grid-column: auto;
     }
   }
 </style>
